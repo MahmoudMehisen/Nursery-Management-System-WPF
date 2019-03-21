@@ -18,18 +18,23 @@ namespace Nursery_Management_System_WPF
     /// <summary>
     /// Interaction logic for parentWindow.xaml
     /// </summary>
+
+    
     public partial class parentWindow : Window
     {
+        string currentUserName;
+        LinkedList<Child> childList;
+        public LinkedList<RowTemplate> childRow;
         public parentWindow()
         {
             InitializeComponent();
+
+            childRow = new LinkedList<RowTemplate>();
+            childList = new LinkedList<Child>();
         }
 
         private void windowPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //enables dragging cause there's no border for this window
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
         }
 
 
@@ -40,21 +45,68 @@ namespace Nursery_Management_System_WPF
 
         private void parentFeedbackButton_Click(object sender, RoutedEventArgs e)
         {
+            feesButton.Visibility = Visibility.Hidden;
             this.profilePanel.Visibility = Visibility.Hidden;
             this.childrenPanel.Visibility = Visibility.Hidden;
             //show feedback grid
             this.feedbackPanel.Visibility = Visibility.Visible;
+            addChildButton.Visibility = Visibility.Hidden;
         }
 
         private void childrenButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            loadChildren();
+
             this.profilePanel.Visibility = Visibility.Hidden;
+            feesButton.Visibility = Visibility.Hidden;
             this.feedbackPanel.Visibility = Visibility.Hidden;
+            addChildButton.Visibility = Visibility.Visible;
             //show children grid
             this.childrenPanel.Visibility = Visibility.Visible;
+        }
+
+        public void loadChildren()
+        {
+            childRow.Clear();
+            children.Children.Clear();
+
+            SQLQuery mSQLQuery = new SQLQuery();
+
+            childList = mSQLQuery.childToLinkedList(mSQLQuery.getChildByParentID(GlobalVariables.globalParent.id));
+
+            LinkedList<Child> notPending = new LinkedList<Child>();
+            foreach (Child c in childList)
+            {
+                if (c.pending == 1)
+                    notPending.AddLast(c);
+                else c.lastName = GlobalVariables.globalParent.firstName;
+            }
+
+            foreach (Child c in notPending)
+            {
+                childList.Remove(c);
+            }
+
+            showPendingChildren();
 
         }
+
+        private void showPendingChildren()
+        {
+            double top = childGrid.Margin.Top;
+            double bottom = childGrid.Margin.Bottom;
+            double left = childGrid.Margin.Left;
+            double right = childGrid.Margin.Right;
+
+            for (int i = 0; i < childList.Count; i++)
+            {
+                RowTemplate rt = new RowTemplate(0, 0, i, 0, 0, childList, null, null, children, null, this, null);
+                rt.Margin = new Thickness(left, top, right, bottom);
+                top += childGrid.Height;
+                childRow.AddLast(rt);
+                children.Children.Add(rt);
+            }
+        }   
 
         private void parentProfileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -73,9 +125,11 @@ namespace Nursery_Management_System_WPF
             ID.Text = GlobalVariables.globalParent.id.ToString();
             phoneNumber.Text = GlobalVariables.globalParent.phoneNumber;
             address.Text = GlobalVariables.globalParent.address;
-
+            currentUserName = username.Text;
             this.childrenPanel.Visibility = Visibility.Hidden;
             this.feedbackPanel.Visibility = Visibility.Hidden;
+            feesButton.Visibility = Visibility.Hidden;
+            addChildButton.Visibility = Visibility.Hidden;
             //show feedback grid
             this.profilePanel.Visibility = Visibility.Visible;
         }
@@ -173,7 +227,7 @@ namespace Nursery_Management_System_WPF
                   phoneError.Visibility = Visibility.Hidden;
             }
 
-            if (mSql.checkForUsername(username.Text) || username.Text.Equals("Enter Username Here"))
+            if((mSql.checkForUsername(username.Text) && currentUserName != username.Text))
             {
                 ans = false;
                 MessageBox.Show("Please Correct Your UserName !", "Error Occur", MessageBoxButton.OK, MessageBoxImage.Hand);
@@ -210,12 +264,41 @@ namespace Nursery_Management_System_WPF
             return ans;
         }
 
-        private void sendFeedback_Click(object sender, RoutedEventArgs e)
+
+        private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+
+        private void submitFeedback_Click(object sender, RoutedEventArgs e)
         {
             SQLQuery mSQLQuery = new SQLQuery();
 
-            mSQLQuery.insertParentFeedback(GlobalVariables.globalParent.id , feedbackText.Text);
+            mSQLQuery.insertParentFeedback(GlobalVariables.globalParent.id, feedbackText.Text);
+
         }
-        
+
+        private void addChildButton_Click(object sender, RoutedEventArgs e)
+        {
+            childSignUp signChild = new childSignUp();
+            signChild.ShowDialog();
+            loadChildren();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Requset Sent", "Payment Message", MessageBoxButton.OK);
+        }
+
+        private void payFeesButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.profilePanel.Visibility = Visibility.Hidden;
+            feesButton.Visibility = Visibility.Visible;
+            this.feedbackPanel.Visibility = Visibility.Hidden;
+            addChildButton.Visibility = Visibility.Hidden;
+            //show children grid
+            this.childrenPanel.Visibility = Visibility.Hidden;
+        }
     }
 }

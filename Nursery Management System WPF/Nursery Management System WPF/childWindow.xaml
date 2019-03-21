@@ -22,7 +22,7 @@
 
     <Grid x:Name="windowPanel" HorizontalAlignment="Left" Height="600" VerticalAlignment="Top" Width="1024" MouseDown="windowPanel_MouseDown">
 
-        <Grid x:Name="titleBar" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Width="1024" Background="#FFE8E4DC">
+        <Grid x:Name="titleBar" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Width="1024" Background="#FFE8E4DC" MouseDown="titleBar_MouseDown">
             <Button x:Name="exitButton" Content="x" Margin="994,10,10,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="#FF3C2222" BorderBrush="{x:Null}" Click="exitButton_Click" Height="20" RenderTransformOrigin="0.78,-0.93"/>
             <Button x:Name="minimizeButton" Content="-" Margin="969,10,35,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="#FF3C2222" BorderBrush="{x:Null}" Click="exitButton_Click" Height="20" RenderTransformOrigin="0.78,-0.93"/>
 
@@ -38,20 +38,20 @@
 
         </Grid>
         <Grid x:Name="viewPanel" HorizontalAlignment="Left" Height="560" Margin="229,40,0,0" VerticalAlignment="Top" Width="800">
-            <Grid x:Name="profilePanel" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="Visible">
-                <Button x:Name="editProfileButton" HorizontalAlignment="Left" Margin="701,25,0,0" VerticalAlignment="Top" Width="70" Height="70" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand">
+            <Grid x:Name="profilePanel" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Margin="10,-10,-10,0">
+                <Button x:Name="editProfileButton" HorizontalAlignment="Left" Margin="701,25,0,0" VerticalAlignment="Top" Width="70" Height="70" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" Click="editProfileButton_Click">
                     <Image x:Name="editIcon" Source="images/edit icon.png" Height="35" Width="35" RenderTransformOrigin="0.596,-0.124"/>
                 </Button>
-                <Ellipse x:Name="profileImage" HorizontalAlignment="Left" Height="238" Margin="88,182,0,0" VerticalAlignment="Top" Width="238" Stroke="Black" StrokeThickness="2">
+                <Ellipse x:Name="profileImage" HorizontalAlignment="Left" Height="238" Margin="98,138,0,0" VerticalAlignment="Top" Width="238" Stroke="Black" StrokeThickness="2">
                     <Ellipse.Fill>
-                        <ImageBrush ImageSource="images/256.png"/>
+                        <ImageBrush x:Name="profilePicture" ImageSource="images/256.png"/>
                     </Ellipse.Fill>
                 </Ellipse>
-                <TextBox x:Name="childName" Text="First Name" HorizontalAlignment="Left" Height="30" Margin="364,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="281" TabIndex="0" FontFamily="Comfortaa"/>
-                <DatePicker x:Name="DOBpicker" HorizontalAlignment="Left" Margin="501,354,0,0" VerticalAlignment="Top" Width="135" TabIndex="3"/>
-                <Label x:Name="DOBLabel" Content="Date of Birth: " HorizontalAlignment="Left" Margin="365,354,0,0" VerticalAlignment="Top" FontFamily="Consolas"/>
-                <TextBox x:Name="roomID" Text="Room ID" HorizontalAlignment="Left" Height="30" Margin="365,390,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" TabIndex="5"/>
-                <GroupBox x:Name="genderBox" Header="Gender" HorizontalAlignment="Left" Margin="364,261,0,0" VerticalAlignment="Top" Width="281" Height="80" FontFamily="Comfortaa">
+                <TextBox x:Name="childName" Text="First Name" HorizontalAlignment="Left" Height="30" Margin="374,172,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="281" TabIndex="0" FontFamily="Comfortaa" VerticalContentAlignment="Center"/>
+                <DatePicker x:Name="DOBpicker" HorizontalAlignment="Left" Margin="511,306,0,0" VerticalAlignment="Top" Width="135" TabIndex="3" VerticalContentAlignment="Center"/>
+                <Label x:Name="DOBLabel" Content="Date of Birth: " HorizontalAlignment="Left" Margin="375,306,0,0" VerticalAlignment="Top" FontFamily="Consolas"/>
+                <TextBox x:Name="roomID" Text="Room ID" HorizontalAlignment="Left" Height="30" Margin="375,342,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" TabIndex="4" VerticalContentAlignment="Center"/>
+                <GroupBox x:Name="genderBox" Header="Gender" HorizontalAlignment="Left" Margin="374,213,0,0" VerticalAlignment="Top" Width="281" Height="80" FontFamily="Comfortaa">
                     <Grid x:Name="genderGrid" HorizontalAlignment="Left" Height="61" VerticalAlignment="Top" Width="281" Margin="0,0,-12,-3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="31*"/>
@@ -64,22 +64,51 @@
                     </Grid>
 
                 </GroupBox>
+                <ListView HorizontalAlignment="Left" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"   Name="childFeaturesList"  Background="White" Height="100" Margin="374,402,0,0" VerticalAlignment="Top" Width="281">
+                    <ListView.View>
+                        <GridView>
+
+                            <GridViewColumn Header="" Width="40">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" />
+
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Feature" Width="281" DisplayMemberBinding="{Binding featureName}"  />
+
+
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView  HorizontalAlignment="Left" Height="100" Margin="55,402,0,0" VerticalAlignment="Top" Width="184" Name="selcetedFeatures" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Current Feature" Width="184" DisplayMemberBinding="{Binding featureName}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Grid>
-            <Grid x:Name="dailyDetailsPanel" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="Visible" d:IsHidden="True">
+            <Grid x:Name="dailyDetailsPanel" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="Hidden">
                 <DatePicker x:Name="selectedDay" HorizontalAlignment="Left" Margin="553,19,0,0" VerticalAlignment="Top" Height="34" Width="219" FontSize="17.333"/>
-                <Image x:Name="dailyDetailsCard" Margin="25,95,40,39" Source="daily details_2@4x.png" Stretch="Fill"/>
-                <Ellipse x:Name="profileImage_Copy" HorizontalAlignment="Left" Height="86" Margin="59,125,0,0" VerticalAlignment="Top" Width="86" StrokeThickness="2">
+                <Image x:Name="dailyDetailsCard" Margin="32,71,30,111" Source="images/daily details_2@4x.png" Stretch="Fill"/>
+                <Ellipse x:Name="profileImage1" HorizontalAlignment="Left" Height="76" Margin="66,98,0,0" VerticalAlignment="Top" Width="86" StrokeThickness="2">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="images/128.png"/>
                     </Ellipse.Fill>
                 </Ellipse>
-                <RichTextBox x:Name="dailyDetails" HorizontalAlignment="Left" Height="225" Margin="63,242,0,0" VerticalAlignment="Top" Width="663" FontFamily="Consolas" FontSize="20" Background="{x:Null}" BorderBrush="{x:Null}">
+                <RichTextBox x:Name="dailyDetails" HorizontalAlignment="Left" Height="201" Margin="70,201,0,0" VerticalAlignment="Top" Width="666" FontFamily="Consolas" FontSize="20" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
                     <FlowDocument>
                         <Paragraph>
                             <Run x:Name ="dailyDetailsContent" Text="Describe daily details of the child..."/>
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
+                <Button x:Name="showDailyDetails" Content="Show" HorizontalAlignment="Left" Margin="610,481,0,0" VerticalAlignment="Top" Width="160" Click="button_Click" Height="40" FontFamily="Comfortaa" FontSize="16" Background="#FFE8E4DC" FontWeight="Bold"/>
+                <Button x:Name="sendDailyDetails" Content="Send" HorizontalAlignment="Left" Margin="610,481,0,0" VerticalAlignment="Top" Width="160" RenderTransformOrigin="1.286,-2.385" Click="sendFeedback_Click" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Comfortaa" FontSize="16" Background="#FFE8E4DC" FontWeight="Bold"/>
             </Grid>
         </Grid>
 

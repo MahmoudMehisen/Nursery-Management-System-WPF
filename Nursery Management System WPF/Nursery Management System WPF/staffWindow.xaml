@@ -20,7 +20,7 @@
     </Window.Background>
 
     <Grid x:Name="windowPanel" HorizontalAlignment="Left" Height="600" VerticalAlignment="Top" Width="1024" Margin="0,0,0,0">
-        <Grid x:Name="titleBar" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Width="1024" Background="#FFE8E4DC">
+        <Grid x:Name="titleBar" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Width="1024" Background="#FFE8E4DC" MouseDown="titleBar_MouseDown">
             <Button x:Name="exitButton" Content="x" Margin="994,10,10,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="#FF3C2222" BorderBrush="{x:Null}" Click="exitButton_Click" Height="20" RenderTransformOrigin="0.78,-0.93"/>
             <Button x:Name="minimizeButton" Content="-" Margin="969,10,35,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="#FF3C2222" BorderBrush="{x:Null}" Height="20" RenderTransformOrigin="0.78,-0.93" Click="minimizeButton_Click"/>
 
@@ -39,10 +39,10 @@
 
         </Grid>
         <Grid x:Name="viewPanel" HorizontalAlignment="Left" Height="560" Margin="229,40,0,0" VerticalAlignment="Top" Width="800">
-            <Grid x:Name="profile" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="Visible">
+            <Grid x:Name="profile" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="Visible" d:IsHidden="True">
                 <TextBox x:Name="firstName" Text=" "  HorizontalAlignment="Left" Height="33" Margin="356,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="177" TabIndex="0"/>
                 <TextBox x:Name="lastName" Text=" "  HorizontalAlignment="Left" Height="33" Margin="566,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="178" TabIndex="1"/>
-                <TextBox x:Name="ID" Text=" "  HorizontalAlignment="Left" Height="34" Margin="356,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" TabIndex="2" IsReadOnly="True"/>
+                <TextBox x:Name="ID" Text=" "  HorizontalAlignment="Left" Height="34" Margin="356,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" TabIndex="2" IsReadOnly="True" IsEnabled="False"/>
                 <TextBox x:Name="email" Text=" " HorizontalAlignment="Left" Height="34" Margin="356,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" TabIndex="3"/>
                 <TextBox x:Name="phoneNumber" Text=" "  HorizontalAlignment="Left" Height="33" Margin="356,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" TabIndex="4"/>
                 <TextBox x:Name="username" Text=" "  HorizontalAlignment="Left" Height="33" Margin="356,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" TabIndex="5"/>
@@ -54,23 +54,33 @@
                 <Button x:Name="editProfileButton" HorizontalAlignment="Left" Margin="701,25,0,0" VerticalAlignment="Top" Width="70" Height="70" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" Click="editProfileButton_Click">
                     <Image x:Name="editIcon" Source="images/edit icon.png" Height="35" Width="35" RenderTransformOrigin="0.596,-0.124"/>
                 </Button>
-                <Image x:Name="firstNameError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="508,169,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
-                <Image x:Name="lastNameError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="721,169,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
-                <Image x:Name="IDError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="721,223,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
-                <Image x:Name="emailError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="721,284,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
-                <Image x:Name="phoneError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="721,340,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
-                <PasswordBox x:Name="password" HorizontalAlignment="Left" Margin="356,428,0,0" VerticalAlignment="Top" Height="33" Width="388"/>
-                <Image x:Name="usernameError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="721,389,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
-                <Image x:Name="passwordError" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Margin="721,438,0,0" Source="images/back 50px.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <Image x:Name="firstNameError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="510,164,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <Image x:Name="lastNameError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="721,164,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <Image x:Name="IDError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="721,219,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <Image x:Name="emailError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="721,280,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <Image x:Name="phoneError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="721,336,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <PasswordBox x:Name="password" HorizontalAlignment="Left" Margin="356,428,0,0" VerticalAlignment="Top" Height="33" Width="388" TabIndex="6"/>
+                <Image x:Name="usernameError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="721,386,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
+                <Image x:Name="passwordError" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="721,434,0,0" Source="images/Error.png" RenderTransformOrigin="1.708,1.908" Visibility="Hidden"/>
             </Grid>
-            <Grid x:Name="room" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="Hidden">
-                <ListView x:Name="StaffAssignedRoom" HorizontalAlignment="Left" Height="550" VerticalAlignment="Top" Width="790" Margin="0,4,0,0" Background="{x:Null}" IsManipulationEnabled="True">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+            <Grid x:Name="room" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800" Visibility="hidden">
+                <ScrollViewer x:Name="childScrollerView" CanContentScroll="True" Margin="0,103,6,38">
+                    <Grid x:Name="children" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                        <Grid x:Name="childGrid" Visibility="Hidden" HorizontalAlignment="Left" Height="113" VerticalAlignment="Top" Width="750" Margin="10,10,0,0">
+
+                            <Ellipse x:Name="childProfileImage" HorizontalAlignment="Left" Height="60" Margin="40,30,0,0" VerticalAlignment="Top" Width="60" Stroke="Black" StrokeThickness="2">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="images/256.png"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Label x:Name="childName" Content="Child Name" HorizontalAlignment="Left" Margin="120,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,-0.422" Grid.ColumnSpan="2"/>
+                            <Button x:Name="acceptButton" Content="Accept" Margin="500,40,150,40" FontFamily="Consolas" FontSize="13.333" Background="#FF7FCD67" Foreground="#FF0B3508" BorderBrush="{x:Null}" Click="exitButton_Click" RenderTransformOrigin="0.78,-0.93" Width="100" Height="30" Grid.Column="1"/>
+                            <Button x:Name="declineButton" Content="Decline" Margin="610,40,40,40" FontFamily="Consolas" FontSize="13.333" Background="#FFCD8167" Foreground="#FF4E0404" BorderBrush="{x:Null}" Click="exitButton_Click" RenderTransformOrigin="0.78,-0.93" Width="100" Height="30" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+                <Label x:Name="roomName" Content="Room ###" HorizontalAlignment="Left" Margin="70,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,-0.422" FontSize="20" FontFamily="Code Bold"/>
             </Grid>
             <Grid x:Name="feedbackPanel" Visibility="Hidden" HorizontalAlignment="Left" Height="560" VerticalAlignment="Top" Width="800">
                 <Image x:Name="feedbackBubble" HorizontalAlignment="Left" Height="436" Margin="79,112,0,0" VerticalAlignment="Top" Width="636" Source="images/feedbackbubble.png"/>

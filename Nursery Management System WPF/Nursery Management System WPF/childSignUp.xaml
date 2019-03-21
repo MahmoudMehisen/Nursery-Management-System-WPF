@@ -13,27 +13,23 @@
         WindowStartupLocation="CenterScreen" 
         WindowStyle="None">
 
-    <Grid Margin="0,-1,0,1" Background="#FFEAC599">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="0*"/>
-        </Grid.ColumnDefinitions>
-        <Image x:Name="profileHeader" HorizontalAlignment="Left" Height="192" Margin="79,57,0,0" VerticalAlignment="Top" Width="252" Source="/images/Asset 1.png" OpacityMask="{x:Null}"/>
-        <Ellipse HorizontalAlignment="Left" Height="105" Margin="144,96,0,0" VerticalAlignment="Top" Width="104" Stroke="Black" StrokeThickness="2">
-            <Ellipse.Fill>
-                <ImageBrush ImageSource="/images/128.png"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <TextBox x:Name="childName" Text="Child's Name" HorizontalAlignment="Left" Height="30" Margin="60,255,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="281" TabIndex="0" FontFamily="Comfortaa" VerticalContentAlignment="Center"/>
-        <DatePicker x:Name="DOBpicker" HorizontalAlignment="Left" Margin="206,384,0,0" VerticalAlignment="Top" Width="136" TabIndex="3" FontFamily="Comfortaa" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" Height="24"/>
-        <Label x:Name="DOBLabel" Content="Date of Birth: " HorizontalAlignment="Left" Margin="60,384,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" Height="25" Width="88"/>
-        <TextBox x:Name="roomID" Text="Room ID" HorizontalAlignment="Left" Height="30" Margin="61,413,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" TabIndex="5" FontFamily="Comfortaa" VerticalContentAlignment="Center"/>
-        <Button x:Name="signUpButton" Content="SIGN UP" HorizontalAlignment="Left" Margin="240,560,0,0" VerticalAlignment="Top" Width="150" Height="30" FontFamily="Code Bold" FontSize="14" TabIndex="6" Click="signUpButton_Click"/>
-        <Grid x:Name="titleBar" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Width="400" Background="#FFFFB300">
+    <Grid Background="#FFEAC599">
+        <Grid x:Name="titleBar" HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Width="400" Background="#FFFFB300" MouseDown="titleBar_MouseDown">
             <Button x:Name="exitButton" Content="x" Margin="370,10,10,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="Black" BorderBrush="{x:Null}" Click="exitButton_Click" Height="20" RenderTransformOrigin="0.78,-0.93"/>
             <Button x:Name="minimizeButton" Content="-" Margin="346,10,34,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="Black" BorderBrush="{x:Null}" Height="20" RenderTransformOrigin="0.78,-0.93" Click="minimizeButton_Click"/>
+            <Button x:Name="backButton" Content="&lt;" Margin="10,10,370,10" Width="20" FontFamily="Consolas" FontSize="13.333" Background="{x:Null}" Foreground="Black" BorderBrush="{x:Null}" Height="20" RenderTransformOrigin="0.78,-0.93" Click="backButton_Click"/>
 
         </Grid>
+        <Image x:Name="profileHeader" HorizontalAlignment="Left" Height="192" Margin="79,57,0,0" VerticalAlignment="Top" Width="243" Source="/images/Asset 1.png" OpacityMask="{x:Null}"/>
+        <Ellipse HorizontalAlignment="Left" Name="childImage" Height="105" Margin="144,96,0,0" VerticalAlignment="Top" Width="104" Stroke="Black" StrokeThickness="2">
+            <Ellipse.Fill>
+                <ImageBrush x:Name="profileImage" ImageSource="/images/128.png"/>
+            </Ellipse.Fill>
+        </Ellipse>
+        <TextBox x:Name="childName" Tag="Child's Name" HorizontalAlignment="Left" Height="30" Margin="60,255,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="281" TabIndex="0" FontFamily="Comfortaa" VerticalContentAlignment="Center" Style="{DynamicResource newPlaceHolder}"/>
+        <DatePicker x:Name="DOBpicker" HorizontalAlignment="Left" Margin="206,384,0,0" VerticalAlignment="Top" Width="136" TabIndex="3" FontFamily="Comfortaa" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" Height="24"/>
+        <Label x:Name="DOBLabel" Content="Date of Birth: " HorizontalAlignment="Left" Margin="60,384,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" Height="25" Width="88"/>
+        <Button x:Name="signUpButton" Content="SIGN UP" HorizontalAlignment="Left" Margin="231,553,0,0" VerticalAlignment="Top" Width="150" Height="30" FontFamily="Code Bold" FontSize="14" TabIndex="6" Click="signUpButton_Click"/>
         <GroupBox x:Name="genderBox" Header="Gender" HorizontalAlignment="Left" Margin="61,293,0,0" VerticalAlignment="Top" Width="281" Height="80" FontFamily="Comfortaa">
             <Grid x:Name="genderGrid" HorizontalAlignment="Left" Height="61" VerticalAlignment="Top" Width="281" Margin="0,0,-12,-3">
                 <Grid.RowDefinitions>
@@ -47,9 +43,32 @@
             </Grid>
 
         </GroupBox>
-        <ComboBox x:Name="featuresComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="282" Margin="60,457,0,0" Height="22" SelectionChanged="featuresComboBox_SelectionChanged">
-            <CheckBox x:Name="checkBox" Content="CheckBox"/>
+        <Button x:Name="OKButton" Content="OK" HorizontalAlignment="Left" Margin="270,553,0,0" VerticalAlignment="Top" Width="100" Click="OKButton_Click" Height="30" FontFamily="Code Bold" FontSize="10" Background="#FFFFB300" Foreground="Black" BorderBrush="{x:Null}" Visibility="Hidden"/>
+        <ListView HorizontalAlignment="Left" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"   Name="childFeaturesList"  Background="#FFEAC599" Height="100" Margin="61,448,0,0" VerticalAlignment="Top" Width="281">
+            <ListView.View>
+                <GridView>
 
-        </ComboBox>
+                    <GridViewColumn Header="" Width="40">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem},Path=IsSelected}" />
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Feature" Width="281" DisplayMemberBinding="{Binding featureName}"  >
+
+                    </GridViewColumn>
+
+
+                </GridView>
+            </ListView.View>
+       
+        </ListView>
+        
+            <Button Content="Import" Background="#FFEAC599" HorizontalAlignment="Left" Margin="266,66,0,0" VerticalAlignment="Top" Width="36" Click="import_Pic_Click" Height="24" FontFamily="Comfortaa" FontSize="10"/>
+        <ComboBox Name="roomID" Visibility="Hidden"  SelectedValuePath="Content" HorizontalAlignment="Left" Margin="60,414,0,0" VerticalAlignment="Top" Width="137" Background="White"/>
     </Grid>
 </Window>
